@@ -2,6 +2,12 @@ import random
 
 import pymysql
 
+USER_NAME = "root"
+PASS_WORD = "x99228899"
+HOST = "127.0.0.1"
+DB = "test"
+CHARSET = "utf8"
+
 
 def gen_code():
     code = ""
@@ -13,9 +19,9 @@ def gen_code():
 
 
 if __name__ == "__main__":
-    db = pymysql.connect(host="127.0.0.1", port=3306,
-                         user="root", passwd="x99228899",
-                         db="test", charset="utf8")
+    db = pymysql.connect(host=HOST, port=3306,
+                         user=USER_NAME, passwd=PASS_WORD,
+                         db=DB, charset=CHARSET)
     cursor = db.cursor()
     code = ""
     my_set = set()

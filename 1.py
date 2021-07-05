@@ -21,4 +21,4 @@ if __name__ == "__main__":
                 flag = True
                 my_set.add(code)
         flag = False
-    print("my_set")
+    print(my_set)
