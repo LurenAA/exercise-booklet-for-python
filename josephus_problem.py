@@ -10,7 +10,8 @@ class Student:
         return "{%s:%d}" % (self.name, self.id)
 
 
-def josephus_circle_solution(container, start_index, interval):
+def josephus_circle_solution(
+     container: "iterable", start_index: int, interval: "nonzeno int") -> list:
     assert(0 <= start_index < len(container))
     assert(interval and type(interval) == int)
     assert(container.__iter__ and container.__iter__().__next__
@@ -37,7 +38,8 @@ def josephus_circle_solution(container, start_index, interval):
 
 
 # josephus_circle_solution函数的递归版本
-def josephus_circle_solution_recursive(container, start_index, interval):
+def josephus_circle_solution_recursive(
+     container: "iterable", start_index: int, interval: "nonzeno int") -> list:
     assert(0 <= start_index < len(container))
     assert(interval and type(interval) == int)
     assert(container.__iter__ and container.__iter__().__next__
