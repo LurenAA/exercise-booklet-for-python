@@ -75,3 +75,4 @@ if __name__ == "__main__":
                 ("肖龚柏4", 4), ("肖龚柏5", 5), ("肖龚柏6", 6), ("肖龚柏7", 7))
     stu_list = [Student(*x) for x in stu_info]
     print(josephus_circle_solution(stu_list, 0, 3))
+    print(josephus_circle_solution_recursive(stu_list, 0, 3))
