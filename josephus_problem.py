@@ -16,22 +16,23 @@ def josephus_circle_solution(container, start_index, interval):
     assert(container.__iter__ and container.__iter__().__next__
            or container.__next__)
 
-    deque_from_container = deque(container)
+    deque_cp_from_con = deque(container)
     if interval < 0:
-        deque_from_container.reverse()
+        deque_cp_from_con.reverse()
         interval = -interval
     passed_index = start_index - 1
     result_list = list()
-    deque_len = len(deque_from_container)
+    deque_len = len(deque_cp_from_con)
 
     while deque_len > 1:
         passed_index = (passed_index + interval) % deque_len
-        result_list.append(deque_from_container[passed_index])
-        deque_from_container.remove(deque_from_container[passed_index])
+        result_list.append(deque_cp_from_con[passed_index])
+        # deque_cp_from_con.remove(deque_cp_from_con[passed_index])
+        del deque_cp_from_con[passed_index]
         passed_index -= 1
         deque_len -= 1
 
-    result_list.append(deque_from_container[0])
+    result_list.append(deque_cp_from_con[0])
     return result_list
 
 
@@ -42,32 +43,33 @@ def josephus_circle_solution_recursive(container, start_index, interval):
     assert(container.__iter__ and container.__iter__().__next__
            or container.__next__)
 
-    deque_from_container = deque(container)
+    deque_cp_from_con = deque(container)
     if interval < 0:
-        deque_from_container.reverse()
+        deque_cp_from_con.reverse()
         interval = -interval
     passed_index = start_index - 1
     result_list = list()
-    deque_len = len(deque_from_container)
+    deque_len = len(deque_cp_from_con)
 
     return josephus_circle_solution_recursive_helper(
-        passed_index, interval, deque_len, result_list, deque_from_container)
+        passed_index, interval, deque_len, result_list, deque_cp_from_con)
 
 
 def josephus_circle_solution_recursive_helper(
-        passed_index, interval, deque_len, result_list, deque_from_container):
+        passed_index, interval, deque_len, result_list, deque_cp_from_con):
     if deque_len == 1:
-        result_list.append(deque_from_container[0])
+        result_list.append(deque_cp_from_con[0])
         return result_list
 
     passed_index = (passed_index + interval) % deque_len
-    result_list.append(deque_from_container[passed_index])
-    deque_from_container.remove(deque_from_container[passed_index])
+    result_list.append(deque_cp_from_con[passed_index])
+    # deque_cp_from_con.remove(deque_cp_from_con[passed_index])
+    del deque_cp_from_con[passed_index]
     passed_index -= 1
     deque_len -= 1
 
     return josephus_circle_solution_recursive_helper(
-        passed_index, interval, deque_len, result_list, deque_from_container)
+        passed_index, interval, deque_len, result_list, deque_cp_from_con)
 
 
 if __name__ == "__main__":
