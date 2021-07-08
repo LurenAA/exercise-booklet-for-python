@@ -4,6 +4,8 @@ TEST_HTML_FILE = "test_html"
 
 
 def get_link_from_html(html_text):
+    assert(type(html_text) == str)
+
     link_list = []
 
     while len(html_text):
@@ -18,8 +20,6 @@ def get_link_from_html(html_text):
 
 
 if __name__ == "__main__":
-    link_list = None
-
     with open(TEST_HTML_FILE, encoding="utf_8") as file:
         link_list = get_link_from_html(file.read())
 

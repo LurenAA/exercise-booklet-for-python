@@ -5,6 +5,9 @@ TEST_WORDS = "python"
 
 
 def count_text_words(file_path, words):
+
+    assert(type(words) == str
+           and type(file_path) == str)
     total_words_num = 0
     words_len = len(words)
 

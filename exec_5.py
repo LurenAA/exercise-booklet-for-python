@@ -9,7 +9,11 @@ IPHONE_HEIGHT = 568
 
 
 def resize_pic(pic, width=IPHONE_WIDTH, height=IPHONE_HEIGHT):
+    assert(type(width) == int and type(height) == int
+           and width > 0 and height > 0)
+
     new_pic = pic.resize((width, height))
+
     return new_pic
 
 

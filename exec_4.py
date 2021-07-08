@@ -4,6 +4,7 @@ TEST_FILE_PATH = "english_text"
 
 
 def count_text_words_num(file_path):
+    assert(type(file_path) == str)
     total_word_num = 0
 
     with open(file_path, "r") as file:

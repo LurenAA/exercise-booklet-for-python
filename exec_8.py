@@ -5,6 +5,8 @@ BODY_END_LEN = len(BODY_END)
 
 
 def get_body_of_html(html_text):
+    assert(type(html_text) == str)
+
     return html_text[html_text.find(BODY_START):
                      html_text.find(BODY_END) + BODY_END_LEN]
 

@@ -15,11 +15,14 @@ def gen_code():
 
 
 def gen_code_set(num=DEFAULT_NUM):
+    assert(type(num) == int and num > 0)
+
+    num = int(num)
     code_set = set()
     code = ""
     flag = False
 
-    for i in range(200):
+    for i in range(num):
         while not flag:
             code = gen_code()
             if code not in code_set:
