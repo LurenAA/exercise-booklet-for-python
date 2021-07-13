@@ -1,4 +1,4 @@
-test*.py
+test*
 *.png
 *.ttf
 .vscode/
@@ -8,3 +8,6 @@ test_picture_directory/
 test_picture_directory_new/
 test_diaries/
 test_html
+c.py
+test*/
+*.xlsx
