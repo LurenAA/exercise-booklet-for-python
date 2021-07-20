@@ -24,24 +24,24 @@ class JcSolution:
         )
 
     def _solve_josephus_circle(
-        self, container: "iterable", start_index: int, interval: "nonzeno int"
-    ) -> list:
-        deque_cp_from_con = deque(container)
+        self, container, start_index, interval
+    ):
+        deque_copy = deque(container)
         if interval < 0:
-            deque_cp_from_con.reverse()
+            deque_copy.reverse()
             interval = -interval
         passed_index = start_index - 1
         # result_list = list()
-        deque_len = len(deque_cp_from_con)
+        deque_len = len(deque_copy)
 
         while deque_len > 1:
             passed_index = (passed_index + interval) % deque_len
-            # result_list.append(deque_cp_from_con[passed_index])
-            yield deque_cp_from_con[passed_index]
-            del deque_cp_from_con[passed_index]
+            # result_list.append(deque_copy[passed_index])
+            yield deque_copy[passed_index]
+            del deque_copy[passed_index]
             passed_index -= 1
             deque_len -= 1
 
-        # result_list.append(deque_cp_from_con[0])
-        yield deque_cp_from_con[0]
+        # result_list.append(deque_copy[0])
+        yield deque_copy[0]
         # return result_list

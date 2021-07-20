@@ -1,10 +1,14 @@
 from abc import ABC, abstractmethod
 from zipfile import ZipFile
+from pathlib import Path
 
 import pandas
 
 CSV_END = "csv"
 EXCEL_END = "xlsx"
+XLSX_SUFFIX = ".xlsx"
+CSV_SUFFIX = ".csv"
+ZIP_SUFFIX = ".zip"
 
 
 class ReaderBase(ABC):
@@ -26,30 +30,28 @@ class ReaderBase(ABC):
 
 
 class ReaderTemplate(ReaderBase):
-    def _read_type(self, file, sheet_name, cols_list):
+    def _read_type(self, file, cols_list):
         raise NotImplementedError("_read_type must be defined in subclass")
 
     def __init__(
         self,
         file: "str, bytes, ExcelFile, xlrd.Book, path object,file-like object",
         *,
-        sheet_name: str = "Sheet1",
         cols_list: "list of col index" = None
     ):
         assert (
             isinstance(cols_list, list)
             or cols_list is None
-            and isinstance(sheet_name, str)
         )
 
-        data_frame = self._read_type(
+        self._data_frame = self._read_type(
             file,
-            sheet_name=sheet_name,
             cols_list=cols_list
         )
 
-        self._col_titles = data_frame.columns.array
-        self._row_iter = data_frame.itertuples(False)
+        self._col_titles = self._data_frame.columns.array
+        self._row_iter = self._data_frame.itertuples(False)
+        # self.axes = list(self._data_frame.axes[1])
 
     def __iter__(self):
         return self
@@ -82,15 +84,32 @@ class ReaderTemplate(ReaderBase):
 
 
 class ExcelReader(ReaderTemplate):
-    def _read_type(self, file, sheet_name, cols_list):
+    def __init__(
+        self,
+        file,
+        *,
+        cols_list=None
+    ):
+        super().__init__(file, cols_list=cols_list)
+        self.axes = list(self._data_frame.axes[1])
+
+    def _read_type(self, file, cols_list):
         return pandas.read_excel(
             file,
-            sheet_name=sheet_name,
             usecols=cols_list)
 
 
 class CSVReader(ReaderTemplate):
-    def _read_type(self, file, sheet_name, cols_list):
+    def __init__(
+        self,
+        file,
+        *,
+        cols_list=None
+    ):
+        super().__init__(file, cols_list=cols_list)
+        self.axes = list(self._data_frame.axes[1])
+
+    def _read_type(self, file, cols_list):
         return pandas.read_csv(file, usecols=cols_list)
 
 
@@ -110,6 +129,15 @@ class ZipReader(ReaderTemplate):
         self._zipfile = ZipFile(file)
         self._file_name_iter = iter(self._zipfile.namelist())
         self._row_iter = None
+
+        pathinfo = Path(self._zipfile.namelist()[0])
+        with self._zipfile.open(self._zipfile.namelist()[0]) as inner_file:
+            if pathinfo.suffix == CSV_SUFFIX:
+                data_frame = pandas.read_csv(inner_file)
+                self.axes = list(data_frame.axes[1])
+            else:
+                data_frame = pandas.read_excel(inner_file)
+                self.axes = list(data_frame.axes[1])
 
     def __next__(self):
         if self._row_iter is None:
