@@ -1,4 +1,4 @@
-from widget import OpenFileWiget
+from ui.widget import MainWindow
 
 import sys
 
@@ -14,6 +14,6 @@ if __name__ == "__main__":
         pass
     else:
         app = QApplication()
-        widget = OpenFileWiget()
+        widget = MainWindow()
         widget.show()
         app.exec()
