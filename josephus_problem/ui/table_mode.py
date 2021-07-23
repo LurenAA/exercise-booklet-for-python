@@ -3,6 +3,8 @@ import sys
 from entity.xlsx_writer import write_to_xlsx
 from entity.zip_writer import write_to_zip
 from entity.csv_writer import write_to_csv
+from entity.josephus_circle import JcSolution
+from entity.student import Student
 
 import pandas as pd
 from PySide6.QtCore import QAbstractTableModel, Qt
@@ -47,3 +49,9 @@ class TableModel(QAbstractTableModel):
     def save_file(self, file_path, file_type, axes):
         write_type = WRITER_TYPE_DICT[file_type]
         write_type(file_path, self._data, axes)
+
+    def get_jc_result(self, start_index, interval):
+        stu_list = [Student(*row) for row in self._data]
+        jc = JcSolution(stu_list, start_index, interval)
+
+        return list(jc)

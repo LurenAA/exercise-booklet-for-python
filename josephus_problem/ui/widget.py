@@ -39,6 +39,8 @@ GEN_BTN_TEXT = "生成"
 ERROR_SAVE_TYPE_TEXT = "保存的文件类型错误"
 SAVE_SUCCESS_TEXT = "保存成功"
 SUCCESS_TITLE = "成功"
+ERROR_NUMBER_MESSAGE = "interval、start_index参数必须为数字"
+OUTOFRANGE_ERROR_TEXT = "输入参数超出范围"
 
 
 class MainWindow(QMainWindow):
@@ -103,19 +105,19 @@ class MainWindow(QMainWindow):
 
             start_index_layout = QHBoxLayout()
             start_index_label = QLabel(START_INDEX_LABEL)
-            start_index_line = QLineEdit()
-            start_index_line.setPlaceholderText(START_INDEX_CONDITION % self._item_row)
+            self._start_index_line = QLineEdit()
+            self._start_index_line.setPlaceholderText(START_INDEX_CONDITION % self._item_row)
             start_index_layout.addWidget(start_index_label)
-            start_index_layout.addWidget(start_index_line)
+            start_index_layout.addWidget(self._start_index_line)
 
             widget_layout.addLayout(start_index_layout)
 
             interval_layout = QHBoxLayout()
             interval_label = QLabel(INTERVAL_LABEL)
-            interval_line = QLineEdit()
-            interval_line.setPlaceholderText(INTERVAL_CONDITION)
+            self._interval_line = QLineEdit()
+            self._interval_line.setPlaceholderText(INTERVAL_CONDITION)
             interval_layout.addWidget(interval_label)
-            interval_layout.addWidget(interval_line)
+            interval_layout.addWidget(self._interval_line)
 
             final_layout = QHBoxLayout()
             save_btn = QPushButton(SAVE_BTN_TEXT)
@@ -158,4 +160,26 @@ class MainWindow(QMainWindow):
             success_mes.exec()
 
     def _gen_js(self):
-        ...
+        start_index = None
+        interval = None
+
+        try:
+            start_index = int(self._start_index_line.text())
+            interval = int(self._interval_line.text())
+            if start_index < 0 or interval == 0 or start_index > self._item_row:
+                raise IndexError
+        except IndexError:
+            err_mes = QMessageBox()
+            err_mes.setWindowTitle(ERROR_TITLE)
+            err_mes.setText(OUTOFRANGE_ERROR_TEXT)
+            err_mes.exec()
+            return None
+        except Exception:
+            err_mes = QMessageBox()
+            err_mes.setWindowTitle(ERROR_TITLE)
+            err_mes.setText(ERROR_NUMBER_MESSAGE)
+            err_mes.exec()
+            return None
+
+        jc_result = self._model.get_jc_result(start_index, interval)
+        self._jc_result.setPlainText(str(jc_result))
