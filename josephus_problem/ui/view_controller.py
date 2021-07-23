@@ -1,7 +1,9 @@
 from pathlib import Path
 
-from .table_mode import TableModel
-from entity.reader import ExcelReader, ZipReader, CSVReader
+from .model import TableModel
+from reader.csv_reader import CSVReader
+from reader.excel_reader import ExcelReader
+from reader.zip_reader import ZipReader
 
 from PySide6.QtWidgets import (
     QWidget,
@@ -29,7 +31,11 @@ ENTER_BUTTON_TEXT = "确认"
 FILE_LINE_PLACEHOLDER = "选择或输入文件名"
 ERROR_MESSAGE = "文件名不存在或后缀错误"
 ERROR_TITLE = "错误"
-READER_SUFFIX_DIC = {".xlsx": ExcelReader, ".csv": CSVReader, ".zip": ZipReader}
+READER_SUFFIX_DIC = {
+    ".xlsx": ExcelReader,
+    ".csv": CSVReader,
+    ".zip": ZipReader
+}
 START_INDEX_LABEL = "开始位置下标:"
 START_INDEX_CONDITION = "0 <= x < %d"
 INTERVAL_LABEL = "间隔："
@@ -106,7 +112,8 @@ class MainWindow(QMainWindow):
             start_index_layout = QHBoxLayout()
             start_index_label = QLabel(START_INDEX_LABEL)
             self._start_index_line = QLineEdit()
-            self._start_index_line.setPlaceholderText(START_INDEX_CONDITION % self._item_row)
+            self._start_index_line.setPlaceholderText(
+                START_INDEX_CONDITION % self._item_row)
             start_index_layout.addWidget(start_index_label)
             start_index_layout.addWidget(self._start_index_line)
 
@@ -166,7 +173,11 @@ class MainWindow(QMainWindow):
         try:
             start_index = int(self._start_index_line.text())
             interval = int(self._interval_line.text())
-            if start_index < 0 or interval == 0 or start_index > self._item_row:
+            if (
+                start_index < 0 or
+                interval == 0 or
+                start_index > self._item_row
+            ):
                 raise IndexError
         except IndexError:
             err_mes = QMessageBox()

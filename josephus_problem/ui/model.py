@@ -1,9 +1,9 @@
 import sys
 
-from entity.xlsx_writer import write_to_xlsx
-from entity.zip_writer import write_to_zip
-from entity.csv_writer import write_to_csv
-from entity.josephus_circle import JcSolution
+from writer.xlsx_writer import write_to_xlsx
+from writer.zip_writer import write_to_zip
+from writer.csv_writer import write_to_csv
+from jc.josephus_circle import JcSolution
 from entity.student import Student
 
 import pandas as pd

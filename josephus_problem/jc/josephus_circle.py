@@ -1,7 +1,9 @@
 from collections import deque
 
+from entity.jc_base import JcBase
 
-class JcSolution:
+
+class JcSolution(JcBase):
     def __init__(
         self, container: "iterable", start_index: int, interval: "nonzeno int"
     ):

@@ -1,4 +1,4 @@
-from ui.widget import MainWindow
+from ui.view_controller import MainWindow
 
 import sys
 
