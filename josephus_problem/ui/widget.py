@@ -15,7 +15,7 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
     QLineEdit,
     QMessageBox,
-    QPlainTextEdit
+    QPlainTextEdit,
 )
 from PySide6.QtCore import Qt
 
@@ -29,17 +29,16 @@ ENTER_BUTTON_TEXT = "确认"
 FILE_LINE_PLACEHOLDER = "选择或输入文件名"
 ERROR_MESSAGE = "文件名不存在或后缀错误"
 ERROR_TITLE = "错误"
-READER_SUFFIX_DIC = {
-    ".xlsx": ExcelReader,
-    ".csv": CSVReader,
-    ".zip": ZipReader
-}
+READER_SUFFIX_DIC = {".xlsx": ExcelReader, ".csv": CSVReader, ".zip": ZipReader}
 START_INDEX_LABEL = "开始位置下标:"
 START_INDEX_CONDITION = "0 <= x < %d"
 INTERVAL_LABEL = "间隔："
 INTERVAL_CONDITION = "x != 0"
 SAVE_BTN_TEXT = "保存"
 GEN_BTN_TEXT = "生成"
+ERROR_SAVE_TYPE_TEXT = "保存的文件类型错误"
+SAVE_SUCCESS_TEXT = "保存成功"
+SUCCESS_TITLE = "成功"
 
 
 class MainWindow(QMainWindow):
@@ -88,6 +87,7 @@ class MainWindow(QMainWindow):
         ):
             reader_type = READER_SUFFIX_DIC[pathinfo.suffix]
             reader = reader_type(file_name)
+            self._axes = reader.axes
             self._widget.close()
             self._widget = QWidget()
             widget_layout = QVBoxLayout()
@@ -104,9 +104,7 @@ class MainWindow(QMainWindow):
             start_index_layout = QHBoxLayout()
             start_index_label = QLabel(START_INDEX_LABEL)
             start_index_line = QLineEdit()
-            start_index_line.setPlaceholderText(
-                START_INDEX_CONDITION % self._item_row
-            )
+            start_index_line.setPlaceholderText(START_INDEX_CONDITION % self._item_row)
             start_index_layout.addWidget(start_index_label)
             start_index_layout.addWidget(start_index_line)
 
@@ -121,12 +119,16 @@ class MainWindow(QMainWindow):
 
             final_layout = QHBoxLayout()
             save_btn = QPushButton(SAVE_BTN_TEXT)
+            save_btn.clicked.connect(self._save_file)
             gen_btn = QPushButton(GEN_BTN_TEXT)
+            gen_btn.clicked.connect(self._gen_js)
             final_layout.addWidget(save_btn)
             final_layout.addWidget(gen_btn)
+            self._jc_result = QPlainTextEdit()
 
             widget_layout.addLayout(interval_layout)
             widget_layout.addLayout(final_layout)
+            widget_layout.addWidget(self._jc_result)
             self._widget.setLayout(widget_layout)
 
             self.setCentralWidget(self._widget)
@@ -135,3 +137,25 @@ class MainWindow(QMainWindow):
             err_mes.setWindowTitle(ERROR_TITLE)
             err_mes.setText(ERROR_MESSAGE)
             err_mes.exec()
+
+    def _save_file(self):
+        dialog = QFileDialog()
+        dialog.setNameFilter(FILE_NAME_PATTERN)
+        dialog.setViewMode(QFileDialog.Detail)
+        if dialog.exec():
+            file_name = dialog.selectedFiles()[0]
+            pathinfo = Path(file_name)
+            if pathinfo.suffix not in [XLSX_SUFFIX, CSV_SUFFIX, ZIP_SUFFIX]:
+                err_mes = QMessageBox()
+                err_mes.setWindowTitle(ERROR_TITLE)
+                err_mes.setText(ERROR_SAVE_TYPE_TEXT)
+                err_mes.exec()
+                return None
+            self._model.save_file(file_name, pathinfo.suffix, self._axes)
+            success_mes = QMessageBox()
+            success_mes.setWindowTitle(SUCCESS_TITLE)
+            success_mes.setText(SAVE_SUCCESS_TEXT)
+            success_mes.exec()
+
+    def _gen_js(self):
+        ...

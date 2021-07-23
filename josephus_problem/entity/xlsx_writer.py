@@ -25,4 +25,4 @@ def write_to_xlsx(file_path, data_list, axes):
 
 
 if __name__ == "__main__":
-    write_to_xlsx("test2adasd.xlsx", [[1,2],[3,4],[5,6]], ["asd", "asd"])
+    write_to_xlsx("test2adasd.xlsx", [[1, 2], [3, 4], [5, 6]], ["asd", "asd"])
