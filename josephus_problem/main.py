@@ -8,20 +8,18 @@ import click
 UI = "ui"
 CMD = "cmd"
 STYLE = "--style"
-COMMAND_HELP = "选择显示模式（ui或者cmd）,不可识别的输入默认为ui"
+COMMAND_HELP = "选择显示模式"
 COMMAND_PROMPT = COMMAND_HELP
 
 
 @click.command()
 @click.option(
     STYLE,
-    default=UI,
+    type=click.Choice([UI, CMD]),
     help=COMMAND_HELP,
     prompt=COMMAND_PROMPT
 )
 def start(style):
-    if style not in (UI, CMD):
-        style = UI
     if style == CMD:
         ...
     elif style == UI:
