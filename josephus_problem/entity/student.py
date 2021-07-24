@@ -4,4 +4,4 @@ class Student:
         self.id = id
 
     def __repr__(self):
-        return f"{{{self.name}:{self.id}}}"
+        return f"|name:{self.name}|id:{self.id}|"

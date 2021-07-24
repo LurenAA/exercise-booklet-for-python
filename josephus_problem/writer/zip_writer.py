@@ -1,6 +1,7 @@
 from zipfile import ZipFile
 import os
 from pathlib import Path
+
 from .csv_writer import write_to_csv
 
 ZIP_SUFFIX = ".zip"

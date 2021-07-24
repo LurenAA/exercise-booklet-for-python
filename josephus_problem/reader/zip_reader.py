@@ -2,6 +2,14 @@ from zipfile import ZipFile
 from pathlib import Path
 
 from .reader_template import ReaderTemplate
+from .excel_reader import ExcelReader
+from .csv_reader import CSVReader
+
+import pandas
+
+XLSX_SUFFIX = ".xlsx"
+CSV_SUFFIX = ".csv"
+ZIP_SUFFIX = ".zip"
 
 
 class ZipReader(ReaderTemplate):
@@ -46,12 +54,12 @@ class ZipReader(ReaderTemplate):
                 self._zipfile.close()
                 raise StopIteration
 
-            if file.endswith(CSV_END):
+            if file.endswith(CSV_SUFFIX):
                 self._row_iter = CSVReader(
                     self._zipfile.open(file), **(self._csv_setting)
                 )
                 next_file_flag = False
-            elif file.endswith(EXCEL_END):
+            elif file.endswith(XLSX_SUFFIX):
                 self._row_iter = ExcelReader(
                     self._zipfile.open(file), **(self._excel_setting)
                 )

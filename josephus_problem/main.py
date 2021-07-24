@@ -1,6 +1,7 @@
-from ui.view_controller import MainWindow
-
 import sys
+
+from ui.view_controller import MainWindow
+from cli.jc_shell import JcShell
 
 from PySide6.QtWidgets import QApplication
 import click
@@ -21,7 +22,7 @@ COMMAND_PROMPT = COMMAND_HELP
 )
 def start(style):
     if style == CMD:
-        ...
+        JcShell().cmdloop()
     elif style == UI:
         app = QApplication()
         widget = MainWindow()
