@@ -1,9 +1,11 @@
 from entity.reader_base import ReaderBase
 
+NOT_IMPLEMENTED_ERROR_INFO = "_read_type must be defined in subclass"
+
 
 class ReaderTemplate(ReaderBase):
     def _read_type(self, file, cols_list):
-        raise NotImplementedError("_read_type must be defined in subclass")
+        raise NotImplementedError(NOT_IMPLEMENTED_ERROR_INFO)
 
     def __init__(
         self,

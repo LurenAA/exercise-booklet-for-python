@@ -37,6 +37,14 @@ START_INDEX = "输入开始位置的下标(0 <= X < %d}): "
 INTERVAL = "输入间隔(X != 0): "
 SAVE_PATH_PROMPT = "输入保存文件位置： "
 SAVE_SUCCESS = "保存成功"
+FILE_PATH_INPUT = "输入你要操作的文件路径: "
+CHOOSE_FILE_HELP = "输入你要操作的文件"
+SHOW_FILE_PATH_HELP = "展示你现在当前的文件"
+SHOW_FILE_CONTENT_HELP = "展示文件内容"
+CHANGE_CONTENT_HELP = "修改数据，按照change_content line attribute value方式进行修改，"
+"例如change_content 0 name xxx, 把第0行的name属性改为xxx"
+GEN_JC_HELP = "生成约瑟夫环结果"
+SAVE_HELP = "保存文件"
 
 
 class JcShell(cmd.Cmd):
@@ -49,8 +57,8 @@ class JcShell(cmd.Cmd):
         self._stu_list = None
 
     def do_choose_file(self, arg):
-        "输入你要操作的文件"
-        file_path = input("输入你要操作的文件路径: ")
+        CHOOSE_FILE_HELP
+        file_path = input(FILE_PATH_INPUT)
         pathinfo = Path(file_path)
 
         if (
@@ -63,7 +71,7 @@ class JcShell(cmd.Cmd):
             print(CHOOSE_FILE_FAIL)
 
     def do_show_current_file_path(self, arg):
-        "展示你现在当前的文件"
+        SHOW_FILE_PATH_HELP
         if not self._file_path:
             print(NO_FILE)
         else:
@@ -79,7 +87,7 @@ class JcShell(cmd.Cmd):
             self._stu_list = [Student(*item) for item in raw_data]
 
     def do_show_file_content(self, arg):
-        "展示文件内容"
+        SHOW_FILE_CONTENT_HELP
         if not self._file_path:
             print(NO_FILE)
         else:
@@ -95,8 +103,7 @@ class JcShell(cmd.Cmd):
         print(SPERATOR)
 
     def do_change_content(self, arg):
-        "修改数据，按照change_content line attribute value方式进行修改，"
-        "例如change_content 0 name xxx, 把第0行的name属性改为xxx"
+        CHANGE_CONTENT_HELP
         if not self._file_path:
             print(NO_FILE)
             return None
@@ -117,7 +124,7 @@ class JcShell(cmd.Cmd):
             print(CHANGE_SUCCESS)
 
     def do_gen_jc(self, arg):
-        "生成约瑟夫环结果"
+        GEN_JC_HELP
         if not self._file_path:
             print(NO_FILE)
             return None
@@ -139,7 +146,7 @@ class JcShell(cmd.Cmd):
         self._pretty_print(jc)
 
     def do_save(self, arg):
-        "保存文件"
+        SAVE_HELP
         if not self._file_path:
             print(NO_FILE)
             return None
